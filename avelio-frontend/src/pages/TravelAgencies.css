@@ -1,0 +1,244 @@
+/* TravelAgencies.css */
+
+.agencies-page {
+  padding: 40px 44px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Header */
+.agencies-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.agencies-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1A202C;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.agencies-subtitle {
+  font-size: 14px;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Buttons */
+.agencies-btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+  text-decoration: none;
+}
+
+.agencies-btn:hover { transform: translateY(-2px); }
+
+.agencies-btn--ghost {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1A202C;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.agencies-btn--ghost:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+/* Stats Cards */
+.agencies-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.agencies-stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.25s ease;
+}
+.agencies-stat-card:hover {
+  border-color: #0EA5E9;
+  box-shadow: 0 8px 20px rgba(14,165,233,.1);
+  transform: translateY(-2px);
+}
+
+.agencies-stat-icon { font-size: 28px; }
+.agencies-stat-value {
+  font-size: 28px; font-weight: 800; color:#1A202C; line-height:1;
+  margin-bottom: 4px;
+}
+.agencies-stat-label {
+  font-size: 12px; color:#64748B; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+}
+
+/* Search */
+.agencies-search-bar { position: relative; margin-bottom: 24px; }
+.agencies-search-input {
+  width: 100%;
+  padding: 14px 48px 14px 16px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 15px;
+  background: rgba(255,255,255,.95);
+  transition: all .2s ease;
+}
+.agencies-search-input:focus {
+  outline: none; border-color:#0EA5E9;
+  box-shadow: 0 0 0 3px rgba(14,165,233,.1);
+}
+.agencies-search-clear {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: #E2E8F0; border: none; width: 28px; height: 28px; border-radius: 50%;
+  cursor: pointer; color: #64748B; display:grid; place-items:center; font-size:14px;
+}
+
+/* Grid */
+.agencies-card { background: transparent; }
+.agencies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* Agency card */
+.agency-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.25s ease;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+.agency-card::before {
+  content: ''; position: absolute; top:0; left:0; width:100%; height:4px;
+  background: linear-gradient(90deg, #074973, #0EA5E9); transform: scaleX(0);
+  transform-origin:left; transition: transform .3s ease;
+}
+.agency-card:hover { border-color:#0EA5E9; box-shadow:0 12px 28px rgba(14,165,233,.15); transform: translateY(-4px); }
+.agency-card:hover::before { transform: scaleX(1); }
+
+.agency-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px; }
+.agency-avatar {
+  width: 56px; height: 56px; border-radius: 12px;
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  display:grid; place-items:center; color:#fff; font-size:22px; font-weight:800;
+  box-shadow: 0 4px 12px rgba(14,165,233,.3);
+}
+
+.agency-status { padding:6px 12px; border-radius:8px; font-size:12px; font-weight:800; }
+.agency-status--active { background:#D1FAE5; color:#065F46; }
+.agency-status--inactive { background:#FEE2E2; color:#B91C1C; }
+
+.agency-card-body { flex:1; margin-bottom: 16px; }
+.agency-name { font-size: 20px; font-weight: 800; color:#1A202C; margin:0 0 6px 0; }
+.agency-id { font-size: 12px; color:#64748B; font-family:'SF Mono', monospace; margin-bottom: 12px; }
+.agency-details { display:flex; flex-direction:column; gap: 8px; }
+.agency-detail { display:flex; align-items:center; gap: 10px; color:#475569; font-size:14px; }
+.agency-detail-icon { font-size: 16px; }
+.agency-detail-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.agency-card-footer { display:flex; gap: 8px; }
+.agency-btn {
+  flex:1; padding:10px 14px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;
+  text-align:center; text-decoration:none; transition: all .2s ease;
+}
+.agency-btn--view { background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); color:#fff; border:none; }
+.agency-btn--view:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,165,233,.3); }
+.agency-btn--edit { background:#F8FAFC; color:#475569; border:1px solid #E2E8F0; }
+.agency-btn--edit:hover { background:#F1F5F9; border-color:#CBD5E0; }
+
+/* States */
+.agencies-loading, .agencies-error, .agencies-empty {
+  padding: 56px 24px; text-align:center; background: rgba(255,255,255,.95);
+  border-radius: 12px; border: 2px dashed #E2E8F0; color:#64748B; font-size: 16px;
+}
+.agencies-error { color:#DC2626; border-color:#FEE2E2; background:#FEF2F2; }
+
+/* Import result */
+.agencies-import-result {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 1px solid #E2E8F0;
+  background: #fff;
+}
+.agencies-import-result.ok { border-color: #D1FAE5; background: #ECFDF5; color: #065F46; }
+.agencies-import-result.err { border-color: #FEE2E2; background: #FEF2F2; color: #991B1B; }
+.import-title { font-weight: 800; margin-bottom: 4px; }
+.import-msg { font-size: 14px; }
+.import-errors { margin-top: 6px; }
+.import-errors summary { cursor: pointer; }
+
+/* Modal */
+.agencies-modal-overlay {
+  position: fixed; inset: 0; background: rgba(2,6,23,.5);
+  display: grid; place-items: center; z-index: 1000;
+}
+.agencies-modal {
+  width: 100%; max-width: 520px; background: rgba(255,255,255,.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(226,232,240,.8);
+  border-radius: 14px; padding: 18px;
+  box-shadow: 0 24px 60px rgba(2,132,199,.2);
+}
+.agencies-modal-header {
+  display:flex; justify-content: space-between; align-items:center; margin-bottom: 8px;
+}
+.modal-close {
+  background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 8px; width: 34px; height: 34px;
+  cursor: pointer; font-size: 16px; color:#475569;
+}
+.modal-close:hover { background: #fff; }
+
+.agencies-form { display:flex; flex-direction:column; gap: 12px; margin-top: 8px; }
+.form-row { display:flex; flex-direction:column; gap:6px; }
+.form-row label { font-size: 13px; font-weight: 700; color:#475569; }
+.req { color:#DC2626; margin-left: 4px; }
+.agencies-form input {
+  background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius: 10px; padding: 10px 12px; font-size: 14px;
+}
+.agencies-form input:focus { outline:none; background:#fff; border-color:#0EA5E9; box-shadow:0 0 0 3px rgba(14,165,233,.12); }
+
+.form-error {
+  background:#FEF2F2; color:#B91C1C; border:1px solid #FEE2E2; border-radius: 10px; padding:10px 12px;
+  font-size: 13px;
+}
+
+.modal-actions { display:flex; justify-content:flex-end; gap: 8px; margin-top: 4px; }
+.modal-help { margin-top: 8px; font-size: 12px; color:#64748B; }
+.modal-help code {
+  background:#F1F5F9; border:1px solid #E2E8F0; padding:2px 6px; border-radius: 6px; margin-left: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .agencies-page { padding: 24px 20px; }
+  .agencies-header { flex-direction: column; gap: 12px; }
+  .agencies-grid { grid-template-columns: 1fr; }
+}

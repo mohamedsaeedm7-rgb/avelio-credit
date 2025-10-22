@@ -1,0 +1,529 @@
+/* Receipt Success Container */
+.receipt-success-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 32px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  position: relative;
+}
+
+/* Top Navigation - BACK TO DASHBOARD */
+.success-top-nav {
+  padding: 20px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.back-to-dash {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.back-to-dash:hover {
+  background: white;
+  border-color: #0EA5E9;
+  color: #0EA5E9;
+  transform: translateY(-1px);
+}
+
+.success-content {
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success Icon - WITH CONFETTI */
+.success-icon-large {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  animation: successPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+  position: relative;
+}
+
+@keyframes successPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti Animation */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #10B981;
+  opacity: 0;
+  border-radius: 50%;
+}
+
+.confetti:nth-child(1) {
+  animation: confetti1 0.8s ease-out 0.2s;
+  background: #10B981;
+}
+
+.confetti:nth-child(2) {
+  animation: confetti2 0.8s ease-out 0.25s;
+  background: #0EA5E9;
+}
+
+.confetti:nth-child(3) {
+  animation: confetti3 0.8s ease-out 0.3s;
+  background: #F59E0B;
+}
+
+.confetti:nth-child(4) {
+  animation: confetti4 0.8s ease-out 0.2s;
+  background: #EF4444;
+}
+
+.confetti:nth-child(5) {
+  animation: confetti5 0.8s ease-out 0.25s;
+  background: #8B5CF6;
+}
+
+.confetti:nth-child(6) {
+  animation: confetti6 0.8s ease-out 0.3s;
+  background: #EC4899;
+}
+
+@keyframes confetti1 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-60px, -80px) rotate(180deg); opacity: 0; }
+}
+
+@keyframes confetti2 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(60px, -80px) rotate(-180deg); opacity: 0; }
+}
+
+@keyframes confetti3 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-40px, -60px) rotate(90deg); opacity: 0; }
+}
+
+@keyframes confetti4 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(40px, -60px) rotate(-90deg); opacity: 0; }
+}
+
+@keyframes confetti5 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-70px, -40px) rotate(270deg); opacity: 0; }
+}
+
+@keyframes confetti6 {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(70px, -40px) rotate(-270deg); opacity: 0; }
+}
+
+/* Success Title - SMALLER & CLOSER */
+.success-title-compact {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: #1A202C;
+  letter-spacing: -0.4px;
+  text-align: center;
+}
+
+/* Receipt Card */
+.receipt-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: 18px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+
+.receipt-number {
+  font-size: 14px;
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  color: #64748B;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #E2E8F0;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.receipt-details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.detail-label {
+  font-size: 14px;
+  color: #64748B;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1A202C;
+  text-align: right;
+}
+
+/* Amount with Smaller Currency Symbol */
+.detail-value.amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0EA5E9;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currency-symbol {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0284C7;
+}
+
+/* Status Badge - DARKER GREEN */
+.status-badge-dark {
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-badge-dark.paid {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+}
+
+.status-badge-dark.pending {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+}
+
+/* QR Section */
+.qr-section {
+  padding-top: 24px;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.qr-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: white;
+  padding: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.qr-label {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Receipt Preview Box */
+.receipt-preview {
+  background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.preview-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #BAE6FD;
+  color: #0EA5E9;
+  flex-shrink: 0;
+}
+
+.preview-text {
+  flex: 1;
+}
+
+.preview-text h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1A202C;
+  margin: 0 0 4px 0;
+}
+
+.preview-text p {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Info Box - CHECK ICONS */
+.info-box {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(2, 132, 199, 0.05) 100%);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.info-box-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.info-box-header svg {
+  color: #0EA5E9;
+}
+
+.info-box-header p {
+  font-size: 14px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.check-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.check-list li {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.check-list li svg {
+  color: #10B981;
+  flex-shrink: 0;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.check-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Action Buttons - PRINT & WHATSAPP SIDE BY SIDE */
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.btn-print {
+  width: 100%;
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-print:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+}
+
+.btn-whatsapp {
+  width: 100%;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+}
+
+.btn-download {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px;
+  color: #475569;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-download:hover {
+  background: white;
+  border-color: #CBD5E0;
+  color: #1A202C;
+  transform: translateY(-1px);
+}
+
+/* Bottom Actions */
+.bottom-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(226, 232, 240, 0.6);
+  margin-top: 24px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #64748B;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link-btn:hover {
+  color: #0EA5E9;
+  background: rgba(14, 165, 233, 0.05);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .receipt-success-container {
+    padding: 0 16px 24px;
+  }
+  
+  .success-content {
+    max-width: 100%;
+  }
+  
+  .success-title-compact {
+    font-size: 22px;
+  }
+  
+  .receipt-card {
+    padding: 24px;
+  }
+  
+  .detail-value.amount {
+    font-size: 24px;
+  }
+  
+  .currency-symbol {
+    font-size: 18px;
+  }
+  
+  .action-buttons-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bottom-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .link-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

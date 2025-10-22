@@ -1,0 +1,61 @@
+.appheader {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 12px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* brand | nav | user */
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-top: 3px solid #074973;
+}
+
+.brand-link { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.brand-logo {
+  width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  box-shadow:0 4px 12px rgba(14,165,233,.3);
+}
+.brand-text { display:flex; flex-direction:column; }
+.brand-title { font-weight:800; color:#0f172a; line-height:1; }
+.brand-subtitle { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:.4px; font-weight:700; }
+
+.app-nav { display:flex; align-items:center; gap:20px; justify-content:center; }
+.nav-link {
+  color:#1e293b; text-decoration:none; font-weight:700; font-size:14px;
+  padding:8px 6px; border-radius:8px;
+}
+.nav-link:hover { color:#0284c7; background:#f1f5f9; }
+.nav-link.active { color:#0284c7; background:#e0f2fe; }
+
+.avatar-wrap { position:relative; justify-self: end; }
+.avatar {
+  width:40px; height:40px; border-radius:12px; border:none; cursor:pointer; display:grid; place-items:center;
+  color:#fff; font-weight:800; background:linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  box-shadow:0 4px 12px rgba(14,165,233,.3);
+}
+.avatar--open { outline:3px solid rgba(14,165,233,.18); }
+
+.dropdown {
+  position:absolute; right:0; top:calc(100% + 8px);
+  width:240px; background:#fff; border:1px solid #e2e8f0; border-radius:12px;
+  box-shadow:0 16px 48px rgba(2,6,23,.12); overflow:hidden;
+}
+.dropdown-header { padding:12px 14px; border-bottom:1px solid #f1f5f9; }
+.dropdown-name { font-weight:800; color:#0f172a; }
+.dropdown-email { font-size:12px; color:#64748b; margin-top:2px; }
+.dropdown-item {
+  width:100%; text-align:left; padding:12px 14px; background:#fff; border:none; cursor:pointer;
+  display:block; text-decoration:none; color:#0f172a; font-weight:600;
+}
+.dropdown-item:hover { background:#f8fafc; }
+.dropdown-item--danger { color:#b91c1c; }
+.dropdown-item--danger:hover { background:#fef2f2; }
+
+@media (max-width: 780px) {
+  .appheader { grid-template-columns: auto 1fr auto; }
+  .app-nav { overflow-x:auto; gap:12px; }
+}

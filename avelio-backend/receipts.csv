@@ -1,0 +1,4 @@
+Receipt Number,Issue Date,Issue Time,Agency ID,Agency Name,Amount,Currency,Payment Method,Status,Payment Date,Station,Issued By,Remarks
+KSH-CR-JUB-20251016-5308,Thu Oct 16 2025 00:00:00 GMT+0200 (Central Africa Time),06:49:18,789456,"SKY TOURS JUBA",3500.00,USD,CASH,PAID,Thu Oct 16 2025 04:49:18 GMT+0200 (Central Africa Time),JUB,"Robert Kuol","Test with QR code"
+KSH-CR-JUB-20251016-9864,Wed Oct 15 2025 00:00:00 GMT+0200 (Central Africa Time),01:33:43,654321,"NILE TRAVEL",1700.00,USD,CASH,PENDING,,JUB,"Robert Kuol",
+KSH-CR-JUB-20251016-5493,Wed Oct 15 2025 00:00:00 GMT+0200 (Central Africa Time),01:31:50,789456,"SKY TOURS JUBA",2500.00,USD,CASH,PAID,Wed Oct 15 2025 23:31:50 GMT+0200 (Central Africa Time),JUB,"Robert Kuol","My first receipt!"

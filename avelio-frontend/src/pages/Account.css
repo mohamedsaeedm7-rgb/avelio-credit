@@ -1,0 +1,59 @@
+.account-page {
+  padding: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.account-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.account-header h1 {
+  margin: 0; font-size: 26px; font-weight: 800; color: #1A202C;
+}
+
+.account-grid {
+  display: grid; gap: 16px; grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 880px) { .account-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(226,232,240,0.8);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+.card-title { font-weight: 800; color: #0F172A; margin-bottom: 12px; }
+
+.profile-rows { display: grid; gap: 10px; }
+.row { display: flex; align-items: center; justify-content: space-between; }
+.row span { color: #64748B; font-size: 13px; }
+.row strong { color: #0F172A; }
+
+.pwd-form { display: grid; gap: 10px; }
+.pwd-form label { font-size: 13px; font-weight: 700; color: #475569; }
+.pwd-form input {
+  background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 10px;
+  padding: 10px 12px; font-size: 14px;
+}
+.pwd-form input:focus { outline: none; background: #fff; border-color: #0EA5E9; box-shadow: 0 0 0 3px rgba(14,165,233,.12); }
+
+.alert {
+  padding: 10px 12px; border-radius: 10px; font-size: 13px;
+  border: 1px solid;
+}
+.alert--ok { background: #ECFDF5; color: #065F46; border-color: #D1FAE5; }
+.alert--err { background: #FEF2F2; color: #B91C1C; border-color: #FEE2E2; }
+
+.actions { display: flex; gap: 8px; margin-top: 6px; }
+
+.btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  color: white; border: none; border-radius: 10px; padding: 10px 16px;
+  font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(14,165,233,.3);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn--ghost { background: #fff; color: #1A202C; border: 1px solid #E2E8F0; }
+.btn--danger { background: #DC2626; }

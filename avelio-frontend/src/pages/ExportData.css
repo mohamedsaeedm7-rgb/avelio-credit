@@ -1,0 +1,75 @@
+/* src/pages/ExportData.css */
+.export-page {
+  padding: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+/* Header */
+.export-page .export-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.export-page .export-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
+.export-page .export-subtitle { margin-top: 4px; color: #64748b; font-size: 14px; }
+
+/* Buttons */
+.export-page .export-btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  color: #fff; border: none; border-radius: 10px; padding: 10px 14px;
+  font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 6px 16px rgba(14,165,233,.25);
+}
+.export-page .export-btn:hover { transform: translateY(-1px); }
+.export-page .export-btn:disabled { opacity: .7; cursor: not-allowed; }
+.export-page .export-btn--ghost { background:#fff; color:#1e293b; border:1px solid #e2e8f0; box-shadow:none; }
+.export-page .export-btn--secondary { background:#f1f5f9; color:#0f172a; border:1px solid #e2e8f0; box-shadow:none; }
+
+/* Cards */
+.export-page .export-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(226,232,240,.9);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, .06);
+}
+
+/* Form */
+.export-page .export-section { margin-bottom: 10px; }
+.export-page .export-section-title { margin:0 0 4px; font-size:18px; font-weight:800; color:#0f172a; }
+.export-page .export-section-desc { margin:0 0 12px; color:#64748b; font-size:13px; }
+
+.export-page .export-form {
+  display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 900px){ .export-page .export-form { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px){ .export-page .export-form { grid-template-columns: 1fr; } }
+
+.export-page .export-field { display:flex; flex-direction:column; gap:6px; }
+.export-page .export-label { font-size:12px; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:.4px; }
+.export-page .export-input,
+.export-page .export-select {
+  background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:10px 12px; font-size:14px; outline:none;
+}
+.export-page .export-input:focus,
+.export-page .export-select:focus {
+  background:#fff; border-color:#0EA5E9; box-shadow:0 0 0 3px rgba(14,165,233,.12);
+}
+
+/* Actions & messages */
+.export-page .export-actions { display:flex; gap:10px; margin-top:10px; }
+.export-page .export-message { margin:12px 0 0; border-radius:10px; padding:10px 12px; font-size:13px; border:1px solid; }
+.export-page .export-message--error { background:#FEF2F2; color:#B91C1C; border-color:#FEE2E2; }
+.export-page .export-message--success { background:#ECFDF5; color:#065F46; border-color:#D1FAE5; }
+
+/* Info cards */
+.export-page .export-info { margin-top:16px; display:grid; gap:12px; grid-template-columns:1fr 1fr 1fr; }
+@media (max-width: 980px){ .export-page .export-info { grid-template-columns:1fr; } }
+.export-page .export-info-card { background:rgba(255,255,255,.96); border:1px solid rgba(226,232,240,.9); border-radius:14px; padding:16px; }
+.export-page .export-info-icon { font-size:22px; }
+.export-page .export-info-title { margin:6px 0; font-weight:800; color:#0f172a; }
+.export-page .export-info-text { margin:0; color:#475569; }
+.export-page .export-info-list { margin:8px 0 0 18px; color:#0f172a; }

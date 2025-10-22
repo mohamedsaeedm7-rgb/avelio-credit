@@ -1,0 +1,328 @@
+/* Receipts.css – styled to match Dashboard look */
+
+/* ====== Layout ====== */
+.receipts-page {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: var(--background-color, #f9fafb);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.receipts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.receipts-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.receipts-subtitle {
+  font-size: 14px;
+  color: #64748B;
+  margin: 8px 0 0 0;
+}
+
+/* ====== Buttons ====== */
+.receipts-btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+  text-decoration: none;
+}
+
+.receipts-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+}
+
+.receipts-btn--ghost {
+  background: #fff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.receipts-btn--ghost:hover {
+  background: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ====== Card ====== */
+.receipts-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* ====== Table ====== */
+.receipts-table-wrap {
+  overflow-x: auto;
+}
+
+.receipts-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.receipts-th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  color: #6b7280;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.receipts-td {
+  padding: 14px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  color: #111827;
+  background: #fff;
+}
+
+.receipts-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.receipts-table tbody tr:hover {
+  background: #f8fafc;
+  transform: translateX(2px);
+}
+
+.receipts-td a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.receipts-td a:hover {
+  text-decoration: underline;
+}
+
+/* ====== Status Pills ====== */
+.receipts-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.receipts-status--paid {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.receipts-status--pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.receipts-status--void {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* ====== States ====== */
+.receipts-empty,
+.receipts-error,
+.receipts-loading {
+  padding: 24px;
+  color: #6b7280;
+  text-align: center;
+  font-size: 15px;
+}
+
+/* ====== Pagination ====== */
+.receipts-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+}
+
+.receipts-pagebtn {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.receipts-pagebtn:hover {
+  background: #f3f4f6;
+}
+
+.receipts-pagebtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ====== Filters Bar ====== */
+.receipts-filters-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+/* Tabs: All | Paid | Pending */
+.receipts-filter-tabs {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  background: #f1f5f9;
+  border-radius: 12px;
+}
+
+.receipts-filter-tab {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.receipts-filter-tab:hover {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.receipts-filter-tab.active {
+  background: #0ea5e9;
+  color: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 2px 10px rgba(14,165,233,.25);
+}
+
+/* Date inputs + Clear button */
+.receipts-date-filters {
+  display: inline-flex;
+  align-items: end;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.receipts-date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.receipts-date-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.receipts-date-input {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #111827;
+  min-width: 180px;
+}
+
+.receipts-date-input:focus {
+  outline: none;
+  background: #fff;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14,165,233,.1);
+}
+
+.receipts-clear-btn {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  height: 36px;
+  align-self: end;
+}
+
+.receipts-clear-btn:hover {
+  background: #f9fafb;
+  border-color: #cbd5e1;
+}
+
+/* Responsive tweaks */
+@media (max-width: 920px) {
+  .receipts-filters-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .receipts-date-filters {
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .receipts-date-input {
+    min-width: 140px;
+    flex: 1;
+  }
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .receipts-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .receipts-pagination {
+    justify-content: center;
+  }
+
+  .receipts-table {
+    font-size: 13px;
+    min-width: 600px;
+  }
+}
