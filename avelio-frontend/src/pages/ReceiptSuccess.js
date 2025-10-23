@@ -10,9 +10,7 @@ import {
   FileText,
   Printer,
   Download,
-  Plus,
   Home,
-  Clock,
   CheckCircle2,
   AlertCircle,
   MessageCircle,
@@ -189,8 +187,6 @@ function ReceiptSuccess() {
           )}
         </div>
 
-
-
         {/* Info Box - CHECK ICONS INSTEAD OF BULLETS */}
         <div className="info-box">
           <div className="info-box-header">
@@ -235,19 +231,6 @@ function ReceiptSuccess() {
           <Download size={18} />
           Download PDF
         </button>
-
-        {/* Bottom Actions */}
-        <div className="bottom-actions">
-          <button onClick={() => navigate('/new-receipt')} className="link-btn">
-            <Plus size={16} />
-            Issue Another
-          </button>
-          
-          <button onClick={() => navigate('/dashboard')} className="link-btn">
-            <Home size={16} />
-            Back to Dashboard
-          </button>
-        </div>
       </div>
     </div>
   );

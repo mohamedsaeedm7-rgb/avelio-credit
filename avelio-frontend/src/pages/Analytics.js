@@ -1,5 +1,6 @@
 // src/pages/Analytics.js
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement,
@@ -19,9 +20,30 @@ async function apiGet(path) {
     localStorage.getItem('token') ||
     localStorage.getItem('authToken') ||
     sessionStorage.getItem('token');
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const headers = { 
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  };
+  
   const res = await fetch(API_BASE + path, { headers });
-  if (!res.ok) throw new Error((await res.text()) || `HTTP ${res.status}`);
+  
+  if (!res.ok) {
+    // Try to parse JSON error first
+    try {
+      const errorData = await res.json();
+      throw new Error(errorData.message || `HTTP ${res.status}`);
+    } catch (e) {
+      // If JSON parsing fails, use text
+      const text = await res.text();
+      throw new Error(text || `HTTP ${res.status}`);
+    }
+  }
+  
   return await res.json();
 }
 
@@ -37,6 +59,7 @@ const rollingAvg = (arr, n) => {
 };
 
 export default function Analytics() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError]   = useState('');
   const [data, setData]     = useState(null);
@@ -60,8 +83,12 @@ export default function Analytics() {
         setLoading(true);
         setError('');
 
+        console.log('📊 Fetching analytics data...');
+
         const res = await apiGet('/receipts');
         const receipts = res?.data?.receipts || res?.receipts || [];
+
+        console.log('✅ Analytics data loaded:', receipts.length, 'receipts');
 
         const now = new Date();
         const thisMonth = now.getMonth();
@@ -133,12 +160,23 @@ export default function Analytics() {
 
         setData(a);
       } catch (e) {
-        setError(e.message || 'Failed to load analytics');
+        console.error('❌ Analytics error:', e);
+        const errorMsg = e.message || 'Failed to load analytics';
+        setError(errorMsg);
+        
+        // If it's an auth error, redirect to login
+        if (errorMsg.toLowerCase().includes('token') || errorMsg.toLowerCase().includes('auth')) {
+          console.log('🚪 Auth error - redirecting to login');
+          setTimeout(() => {
+            localStorage.clear();
+            navigate('/login');
+          }, 2000);
+        }
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [navigate]);
 
   // charts render
   useEffect(() => {
@@ -197,18 +235,18 @@ export default function Analytics() {
               fill: false,
               tension: 0.3,
               borderDash: [6,4],
-              pointRadius: 0,
-              borderWidth: 2
+              borderWidth: 2,
+              pointRadius: 0
             },
             {
               label: 'Cumulative',
               data: cumRev,
               borderColor: '#10B981',
-              backgroundColor: 'rgba(16,185,129,0.10)',
+              backgroundColor: 'rgba(16,185,129,0.08)',
               fill: true,
-              tension: 0.25,
-              pointRadius: 0,
-              yAxisID: 'y1'
+              tension: 0.3,
+              borderWidth: 2,
+              pointRadius: 0
             }
           ]
         },
@@ -217,32 +255,11 @@ export default function Analytics() {
           maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom' },
-            tooltip: {
-              backgroundColor: '#1A202C',
-              padding: 12,
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              callbacks: {
-                label: ctx => {
-                  const v = ctx.parsed.y || 0;
-                  const name = ctx.dataset.label;
-                  return `${name}: $${v.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
-                }
-              }
-            }
+            tooltip: { backgroundColor: '#1A202C', padding: 12 }
           },
           scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: '#E2E8F0' },
-              ticks: { callback: v => '$' + Number(v).toLocaleString() }
-            },
-            y1: {
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              ticks: { callback: v => '$' + Number(v).toLocaleString() }
-            },
-            x: { grid: { display: false } }
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: '#E2E8F0' } }
           }
         }
       });
@@ -255,30 +272,25 @@ export default function Analytics() {
         data: {
           labels: ['Paid', 'Pending', 'Void'],
           datasets: [{
-            data: [
-              data.byStatus.PAID || 0,
-              data.byStatus.PENDING || 0,
-              data.byStatus.VOID || 0
-            ],
-            backgroundColor: ['#10B981','#F59E0B','#EF4444'],
-            borderWidth: 0,
-            hoverOffset: 10
+            data: [data.paidRevenue, data.pendingRevenue, data.voidRevenue],
+            backgroundColor: ['rgba(16,185,129,.9)', 'rgba(245,158,11,.9)', 'rgba(239,68,68,.9)'],
+            borderColor: ['#10B981', '#F59E0B', '#EF4444'],
+            borderWidth: 2
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { padding: 14, font: { size: 12, weight: '700' } } },
+            legend: { position: 'bottom' },
             tooltip: {
               backgroundColor: '#1A202C',
               padding: 12,
               callbacks: {
-                label: ctx => {
-                  const value = ctx.parsed || 0;
-                  const total = ctx.dataset.data.reduce((a,b)=>a+b,0) || 1;
-                  const p = (value/total*100).toFixed(1);
-                  return `${ctx.label}: $${value.toLocaleString(undefined,{maximumFractionDigits:2})} (${p}%)`;
+                label: (ctx) => {
+                  const label = ctx.label || '';
+                  const value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(ctx.raw);
+                  return `${label}: ${value}`;
                 }
               }
             }
@@ -288,18 +300,18 @@ export default function Analytics() {
     }
 
     // 3) Top Agencies (horizontal bar)
-    if (agenciesRef.current) {
-      const top5 = (data.topAgenciesList || []).slice(0,5);
+    if (agenciesRef.current && data.topAgenciesList.length > 0) {
+      const top5 = data.topAgenciesList.slice(0, 5);
       chartsRef.current.agencies = new ChartJS(agenciesRef.current, {
         type: 'bar',
         data: {
-          labels: top5.map(a => a.name.length>22 ? a.name.slice(0,22)+'…' : a.name),
+          labels: top5.map(a => a.name.length > 20 ? a.name.slice(0, 20) + '...' : a.name),
           datasets: [{
             label: 'Revenue',
             data: top5.map(a => a.revenue),
-            backgroundColor: 'rgba(14,165,233,0.85)',
+            backgroundColor: 'rgba(14,165,233,.9)',
             borderColor: '#0EA5E9',
-            borderWidth: 2,
+            borderWidth: 1,
             borderRadius: 8
           }]
         },
@@ -308,56 +320,61 @@ export default function Analytics() {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display:false },
+            legend: { display: false },
             tooltip: {
-              backgroundColor:'#1A202C',
-              padding:12,
-              callbacks: { label: ctx => `Revenue: $${ctx.parsed.x.toLocaleString()}` }
+              backgroundColor: '#1A202C',
+              padding: 12,
+              callbacks: {
+                label: (ctx) => {
+                  const value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(ctx.raw);
+                  return `Revenue: ${value}`;
+                }
+              }
             }
           },
           scales: {
-            x: { beginAtZero:true, grid:{color:'#E2E8F0'}, ticks:{ callback:v=>'$'+Number(v).toLocaleString()} },
-            y: { grid:{display:false} }
+            x: { beginAtZero: true, grid: { color: '#E2E8F0' } },
+            y: { grid: { display: false } }
           }
         }
       });
     }
 
-    // 4) Monthly Receipts Count (bar)
+    // 4) Receipt Count (bar)
     if (countRef.current) {
-      const counts = months.map(m => data.byMonth[m]?.count || 0);
+      const countArr = months.map(m => data.byMonth[m]?.count || 0);
       chartsRef.current.count = new ChartJS(countRef.current, {
         type: 'bar',
         data: {
-          labels: labelsFull.map(l => l.split(' ')[0]),
+          labels: labelsFull,
           datasets: [{
             label: 'Receipts',
-            data: counts,
-            backgroundColor: 'rgba(2,132,199,0.85)',
-            borderColor: '#0284C7',
-            borderWidth: 2,
+            data: countArr,
+            backgroundColor: 'rgba(14,165,233,.9)',
+            borderColor: '#0EA5E9',
+            borderWidth: 1,
             borderRadius: 8
           }]
         },
         options: {
-          responsive:true, maintainAspectRatio:false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
-            legend:{display:false},
-            tooltip:{ backgroundColor:'#1A202C', padding:12, callbacks:{ label: c => `${c.parsed.y} receipts` } }
+            legend: { display: false },
+            tooltip: { backgroundColor: '#1A202C', padding: 12 }
           },
           scales: {
-            y:{ beginAtZero:true, grid:{color:'#E2E8F0'}, ticks:{ stepSize:1 }},
-            x:{ grid:{display:false} }
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: '#E2E8F0' } }
           }
         }
       });
     }
 
-    // 5) Paid vs Pending counts by month (stacked)
+    // 5) Paid vs Pending (stacked bar)
     if (stackedRef.current) {
       const paid = months.map(m => data.byMonthStatus[m]?.PAID || 0);
       const pend = months.map(m => data.byMonthStatus[m]?.PENDING || 0);
-
       chartsRef.current.stacked = new ChartJS(stackedRef.current, {
         type: 'bar',
         data: {
@@ -415,7 +432,18 @@ export default function Analytics() {
     return <div className="analytics-page"><div className="analytics-loading">Loading analytics…</div></div>;
   }
   if (error) {
-    return <div className="analytics-page"><div className="analytics-error">{error}</div></div>;
+    return (
+      <div className="analytics-page">
+        <div className="analytics-error">
+          {error}
+          {error.toLowerCase().includes('token') && (
+            <p style={{ marginTop: '12px', fontSize: '14px' }}>
+              Redirecting to login...
+            </p>
+          )}
+        </div>
+      </div>
+    );
   }
 
   const collectionRate = data.totalRevenue > 0 ? (data.paidRevenue / data.totalRevenue) * 100 : 0;

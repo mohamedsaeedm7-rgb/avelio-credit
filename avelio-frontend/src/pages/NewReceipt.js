@@ -38,9 +38,9 @@ function NewReceipt() {
     
     // Debug: Show token info
     const token = utils.getToken();
-    console.log('🔑 Token exists:', !!token);
+    console.log('🔐 Token exists:', !!token);
     if (token) {
-      console.log('🔑 Token preview:', token.substring(0, 20) + '...');
+      console.log('🔐 Token preview:', token.substring(0, 20) + '...');
     }
   }, [navigate]);
 
@@ -79,7 +79,10 @@ function NewReceipt() {
         if (isMounted) {
           if (err.response?.status === 401) {
             setError('Session expired. Please login again.');
-            setTimeout(() => navigate('/login'), 2000);
+            setTimeout(() => {
+              localStorage.clear();
+              navigate('/login');
+            }, 2000);
           } else {
             setError('Failed to load agencies. Please refresh the page.');
           }
@@ -149,6 +152,14 @@ function NewReceipt() {
 
     try {
       console.log('📝 Creating receipt...');
+      console.log('📦 Request data:', {
+        agency_id: selectedAgency,
+        amount: amountNum,
+        currency: 'USD',
+        payment_method: paymentMethod,
+        status: status
+      });
+
       const response = await receiptsAPI.create({
         agency_id: selectedAgency,
         amount: amountNum,
@@ -166,6 +177,8 @@ function NewReceipt() {
       });
     } catch (err) {
       console.error('❌ Create receipt error:', err);
+      console.error('❌ Error response:', err.response?.data);
+      console.error('❌ Error status:', err.response?.status);
       
       const errorMessage = err.response?.data?.message || 
                           err.message || 
@@ -174,9 +187,14 @@ function NewReceipt() {
       setError(errorMessage);
       setLoading(false);
       
-      // If 401, redirect to login
-      if (err.response?.status === 401) {
-        setTimeout(() => navigate('/login'), 2000);
+      // Only redirect to login if it's definitely an auth issue
+      // Don't auto-logout on validation or other errors
+      if (err.response?.status === 401 && errorMessage.toLowerCase().includes('token')) {
+        console.log('🚪 Auth error - redirecting to login');
+        setTimeout(() => {
+          localStorage.clear();
+          navigate('/login');
+        }, 2000);
       }
     }
   };
