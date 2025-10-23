@@ -1,15 +1,67 @@
 import axios from 'axios';
 
 // ========================================
+// SMART API URL DETECTION
+// ========================================
+const getApiBaseUrl = () => {
+  // 1. First priority: Environment variable (set in deployment platform)
+  if (process.env.REACT_APP_API_URL) {
+    console.log('🌍 Using API URL from environment:', process.env.REACT_APP_API_URL);
+    return process.env.REACT_APP_API_URL;
+  }
+
+  // 2. Check if in production
+  if (process.env.NODE_ENV === 'production') {
+    const hostname = window.location.hostname;
+    
+    // Detect deployment platform and construct API URL
+    if (hostname.includes('vercel.app')) {
+      const apiUrl = hostname.replace('kushair', 'kushair-api');
+      console.log('🌍 Vercel detected, using:', `https://${apiUrl}/api/v1`);
+      return `https://${apiUrl}/api/v1`;
+    }
+    
+    if (hostname.includes('netlify.app')) {
+      const apiUrl = hostname.replace('kushair', 'kushair-api');
+      console.log('🌍 Netlify detected, using:', `https://${apiUrl}/api/v1`);
+      return `https://${apiUrl}/api/v1`;
+    }
+    
+    if (hostname.includes('render.com')) {
+      console.log('🌍 Render detected, using: https://kushair-api.onrender.com/api/v1');
+      return 'https://kushair-api.onrender.com/api/v1';
+    }
+
+    // ⚠️ IMPORTANT: Replace this with your actual production backend URL
+    console.warn('⚠️ Using default production URL - UPDATE THIS!');
+    console.warn('⚠️ Set REACT_APP_API_URL environment variable in your deployment platform');
+    return 'REPLACE_WITH_YOUR_BACKEND_URL/api/v1';
+  }
+
+  // 3. Development fallback
+  console.log('🏠 Development mode, using localhost:5001');
+  return 'http://localhost:5001/api/v1';
+};
+
+// ========================================
 // AXIOS INSTANCE WITH BASE CONFIGURATION
 // ========================================
+const API_BASE_URL = getApiBaseUrl();
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5001/api/v1',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   },
-  timeout: 30000 // 30 second timeout
+  timeout: 30000, // 30 second timeout
+  withCredentials: false // Set to true if using cookies
 });
+
+// Log configuration on startup
+console.log('🌐 API Configuration:');
+console.log('  - Base URL:', api.defaults.baseURL);
+console.log('  - Environment:', process.env.NODE_ENV);
+console.log('  - Timeout:', api.defaults.timeout + 'ms');
 
 // ========================================
 // REQUEST INTERCEPTOR - Add token to every request
