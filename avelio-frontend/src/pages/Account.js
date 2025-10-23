@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import './Account.css';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { handleLogout } from '../utils/auth';
+
 
 export default function Account() {
   const navigate = useNavigate();
@@ -93,7 +95,7 @@ export default function Account() {
 
             <div className="actions">
               <button className="btn" type="submit" disabled={busy}>{busy ? 'Updating…' : 'Update Password'}</button>
-              <button className="btn btn--danger" type="button" onClick={logout}>Logout</button>
+              <button className="btn btn--danger" type="button" onClick={handleLogout}>Logout</button>
             </div>
           </form>
         </div>

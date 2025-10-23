@@ -4,6 +4,8 @@ const receiptController = require('../controllers/receiptController');
 const { requireAuth } = require('../middleware/authMiddleware');
 const { generateReceiptPDF } = require('../utils/pdfGenerator');
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
 
 router.use(requireAuth);
 
@@ -35,6 +37,25 @@ router.get('/:id/pdf', async (req, res) => {
 
     const receipt = result.rows[0];
 
+    // Company information for PDF header
+    const companyInfo = {
+      name: 'KUSH AIR',
+      tagline: 'Spirit of the South',
+      address: 'Juba International Airport, P.O. Box 123, Juba, South Sudan',
+      contacts: 'finance@kushair.com | +211 920 000 000',
+      iata_code: 'K9',
+      website: 'www.kushair.com'
+    };
+
+    // ✅ Load company logo
+    let logoBuffer = null;
+    try {
+      const logoPath = path.join(__dirname, '../assets/logo.png');
+      logoBuffer = fs.readFileSync(logoPath);
+    } catch (error) {
+      console.warn('Logo file not found, using text logo');
+    }
+
     const pdfData = {
       receipt_number: receipt.receipt_number,
       issue_date: receipt.issue_date,
@@ -49,7 +70,9 @@ router.get('/:id/pdf', async (req, res) => {
       payment_method: receipt.payment_method,
       status: receipt.status,
       payment_date: receipt.payment_date,
-      issued_by: receipt.issued_by_name
+      issued_by: receipt.issued_by_name,
+      company: companyInfo,
+      company_logo: logoBuffer // ✅ Added logo to PDF data
     };
 
     const pdfBuffer = await generateReceiptPDF(pdfData);

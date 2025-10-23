@@ -11,10 +11,11 @@ import {
   AlertCircle,
   Search
 } from 'lucide-react';
-import api, { receiptsAPI } from '../services/api';
+import { receiptsAPI, agenciesAPI, utils } from '../services/api';
 import './NewReceipt.css';
 
 function NewReceipt() {
+  const navigate = useNavigate();
   const [selectedAgency, setSelectedAgency] = useState('');
   const [agencies, setAgencies] = useState([]);
   const [amount, setAmount] = useState('');
@@ -26,36 +27,72 @@ function NewReceipt() {
   const [showDropdown, setShowDropdown] = useState(false);
   const amountInputRef = useRef(null);
 
-  // Auto-focus amount input
+  // Check authentication on mount
+  useEffect(() => {
+    if (!utils.isAuthenticated()) {
+      console.error('❌ No authentication token found');
+      setError('Session expired. Please login again.');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+    
+    // Debug: Show token info
+    const token = utils.getToken();
+    console.log('🔑 Token exists:', !!token);
+    if (token) {
+      console.log('🔑 Token preview:', token.substring(0, 20) + '...');
+    }
+  }, [navigate]);
+
+  // Auto-focus amount input when agency is selected
   useEffect(() => {
     if (amountInputRef.current && selectedAgency) {
       amountInputRef.current.focus();
     }
   }, [selectedAgency]);
 
+  // Fetch agencies on mount
   useEffect(() => {
-  let isMounted = true;
-  (async () => {
-    try {
-      const res = await api.get('/agencies');
-      // normalize shapes: {data:{agencies}} or {data:{rows}} or {agencies}/{rows}
-      const list =
-        res?.data?.data?.agencies ??
-        res?.data?.data?.rows ??
-        res?.data?.agencies ??
-        res?.data?.rows ??
-        [];
-      if (isMounted) setAgencies(Array.isArray(list) ? list : []);
-    } catch (err) {
-      console.error('Fetch agencies error:', err?.response?.data || err.message);
-    }
-    const token =
-  localStorage.getItem('token') ||
-  localStorage.getItem('authToken') ||
-  sessionStorage.getItem('token');
-  })();
-  return () => { isMounted = false; };
-}, []);
+    let isMounted = true;
+    
+    const fetchAgencies = async () => {
+      try {
+        console.log('🏢 Fetching agencies...');
+        const res = await agenciesAPI.getAll();
+        
+        // Normalize different response structures
+        const list =
+          res?.data?.data?.agencies ??
+          res?.data?.data?.rows ??
+          res?.data?.agencies ??
+          res?.data?.rows ??
+          res?.data ??
+          [];
+        
+        if (isMounted) {
+          const agencyArray = Array.isArray(list) ? list : [];
+          console.log('✅ Agencies loaded:', agencyArray.length);
+          setAgencies(agencyArray);
+        }
+      } catch (err) {
+        console.error('❌ Fetch agencies error:', err?.response?.data || err.message);
+        if (isMounted) {
+          if (err.response?.status === 401) {
+            setError('Session expired. Please login again.');
+            setTimeout(() => navigate('/login'), 2000);
+          } else {
+            setError('Failed to load agencies. Please refresh the page.');
+          }
+        }
+      }
+    };
+    
+    fetchAgencies();
+    
+    return () => { 
+      isMounted = false; 
+    };
+  }, [navigate]);
 
   const handleAmountChange = (e) => {
     const value = e.target.value.replace(/[^0-9.]/g, '');
@@ -69,18 +106,22 @@ function NewReceipt() {
     if (!value) return '';
     const num = parseFloat(value);
     if (isNaN(num)) return '';
-    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    });
   };
 
   const filteredAgencies = agencies.filter(agency =>
-    agency.agency_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    agency.agency_id.includes(searchTerm)
+    agency.agency_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    agency.agency_id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelectAgency = (agencyId) => {
     setSelectedAgency(agencyId);
     setSearchTerm('');
     setShowDropdown(false);
+    setError(''); // Clear any previous errors
   };
 
   const getSelectedAgencyName = () => {
@@ -98,7 +139,8 @@ function NewReceipt() {
       return;
     }
     
-const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount || amountNum <= 0) {
+    const amountNum = parseFloat(String(amount).replace(/,/g, ''));
+    if (!amount || amountNum <= 0) {
       setError('Please enter a valid amount');
       return;
     }
@@ -106,6 +148,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
     setLoading(true);
 
     try {
+      console.log('📝 Creating receipt...');
       const response = await receiptsAPI.create({
         agency_id: selectedAgency,
         amount: amountNum,
@@ -115,22 +158,33 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
         remarks: ''
       });
 
+      console.log('✅ Receipt created successfully:', response.data);
+
       // Success! Navigate to receipt view
       navigate('/receipt-success', { 
         state: { receipt: response.data.data.receipt } 
       });
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create receipt. Please try again.');
+      console.error('❌ Create receipt error:', err);
+      
+      const errorMessage = err.response?.data?.message || 
+                          err.message || 
+                          'Failed to create receipt. Please try again.';
+      
+      setError(errorMessage);
       setLoading(false);
+      
+      // If 401, redirect to login
+      if (err.response?.status === 401) {
+        setTimeout(() => navigate('/login'), 2000);
+      }
     }
   };
 
-  const navigate = useNavigate();
   const isFormValid = selectedAgency && amount && parseFloat(amount) > 0;
 
   return (
     <div className="new-receipt-container">
-
       <main className="form-main">
         <form onSubmit={handleSubmit} className="receipt-form">
           {error && (
@@ -169,9 +223,10 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
                     {filteredAgencies.length > 0 ? (
                       filteredAgencies.map((agency) => (
                         <div
-                          key={agency.agency_id}
+                          key={agency.id || agency.agency_id}
                           className="agency-option"
-                          onClick={() => handleSelectAgency(agency.id)}                        >
+                          onClick={() => handleSelectAgency(agency.id)}
+                        >
                           <Building2 size={16} />
                           <div className="agency-option-info">
                             <div className="agency-option-name">{agency.agency_name}</div>
@@ -180,7 +235,9 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
                         </div>
                       ))
                     ) : (
-                      <div className="agency-option-empty">No agencies found</div>
+                      <div className="agency-option-empty">
+                        {agencies.length === 0 ? 'Loading agencies...' : 'No agencies found'}
+                      </div>
                     )}
                   </div>
                 )}
@@ -200,7 +257,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
             )}
           </div>
 
-          {/* Amount Input - REDUCED SIZE */}
+          {/* Amount Input */}
           <div className="form-group amount-group">
             <label>
               <DollarSign size={18} />
@@ -230,7 +287,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
             )}
           </div>
 
-          {/* Payment Method Toggle - SOLID FILL FOR ACTIVE */}
+          {/* Payment Method Toggle */}
           <div className="form-group">
             <label>
               <CreditCard size={18} />
@@ -256,7 +313,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
             </div>
           </div>
 
-          {/* Receipt Status - RENAMED FROM "PAYMENT STATUS" */}
+          {/* Receipt Status */}
           <div className="form-group">
             <label>
               <FileText size={18} />
@@ -282,7 +339,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
             </div>
           </div>
 
-          {/* Submit Button - AVELIO BLUE & DISABLED UNTIL VALID */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading || !isFormValid}
@@ -301,7 +358,7 @@ const amountNum = parseFloat(String(amount).replace(/,/g, ''));    if (!amount |
             )}
           </button>
 
-          {/* Info Box - MOVED TO BOTTOM, GRAY BORDER, SMALLER FONT */}
+          {/* Info Box */}
           <div className="form-info-bottom">
             <p>
               <strong>Note:</strong> This receipt confirms the agency's credit deposit. 

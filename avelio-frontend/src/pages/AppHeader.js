@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import './AppHeader.css';
 import { Plane } from 'lucide-react';
+import { handleLogout } from '../utils/auth';
 
 export default function AppHeader() {
-  const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
@@ -31,12 +31,6 @@ export default function AppHeader() {
       document.removeEventListener('keydown', onEsc);
     };
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
-  };
 
   const isLoginPage = location.pathname === '/login';
 
